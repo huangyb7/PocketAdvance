@@ -3,6 +3,7 @@
 > 一个跑在浏览器里的 GBA 掌机：内置 3 款免费开源的同人游戏，也可以直接打开你自己的 `.gba` / `.zip` 卡带文件。
 > 纯前端、无构建、无后端、无外部请求；存档留在本机浏览器。
 >
+> 线上试玩：<https://huangyb7.github.io/PocketAdvance/>
 > 仓库：<https://github.com/huangyb7/PocketAdvance>
 
 ![首页](screenshots/01-home.png)
@@ -159,5 +160,5 @@ PocketAdvance/
 - 字体 [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P)（SIL OFL 1.1）。
 
 本项目只做界面、游戏库与工程整合，不含任何商业 ROM。
-友情赞助链接： https://ifdian.net/a/huangyubin
+友情赞助链接： <https://ifdian.net/a/huangyubin>
 
