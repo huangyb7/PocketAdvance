@@ -1,0 +1,14 @@
+# 统一按二进制处理，避免 Windows 换行转换弄坏卡带镜像
+* text=auto eol=lf
+*.gba binary
+*.agb binary
+*.bin binary
+*.data binary
+*.wasm binary
+*.zip binary
+*.png binary
+*.jpg binary
+*.gif binary
+*.ttf binary
+*.woff2 binary
+*.7z binary

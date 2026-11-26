@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>掌机口袋 POCKET ADVANCE · 网页版 GBA 模拟器</title>
+<meta name="description" content="在浏览器里运行 GBA 游戏：内置免费开源同人游戏，支持导入本地 .gba / .zip 卡带文件，mGBA 内核，存档保存在本机，可离线运行。">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+
+<header class="topbar">
+  <a class="brand" href="#/">
+    <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
+      <rect x="3" y="7" width="34" height="26" rx="6" fill="none" stroke="currentColor" stroke-width="2.2"/>
+      <rect x="8" y="12" width="17" height="12" rx="1.6" fill="currentColor" opacity=".85"/>
+      <circle cx="31" cy="16" r="2.2" fill="currentColor"/>
+      <circle cx="27.4" cy="20.6" r="2.2" fill="currentColor" opacity=".6"/>
+      <path d="M10 29h5M12.5 26.5v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <circle cx="28" cy="29" r="2.4" fill="none" stroke="currentColor" stroke-width="1.8"/>
+    </svg>
+    <span class="brand-text">
+      <b>POCKET ADVANCE</b>
+      <i>掌机口袋</i>
+    </span>
+  </a>
+  <nav class="topnav">
+    <button class="btn ghost" id="btn-about" type="button">关于 / 版权</button>
+    <button class="btn primary" id="btn-import" type="button">
+      <span class="plus">＋</span> 导入 ROM
+    </button>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="kicker"><span class="dot"></span>GAME BOY ADVANCE · IN YOUR BROWSER</p>
+      <h1>把 GBA <span class="hl">塞进浏览器</span></h1>
+      <p class="lede">
+        内置免费开源的同人游戏，也能直接打开你自己的 <code>.gba</code> / <code>.zip</code> 卡带文件。
+        mGBA 内核跑在 WebAssembly 上，存档留在本机，断网也能玩。
+      </p>
+      <div class="hero-actions">
+        <button class="btn primary lg" id="btn-play-first" type="button">▶ 立即开玩</button>
+        <button class="btn lg" id="btn-import-hero" type="button">导入我的 ROM</button>
+      </div>
+      <ul class="hero-facts">
+        <li><b>mGBA</b><span>WASM 内核</span></li>
+        <li><b>240×160</b><span>原生分辨率</span></li>
+        <li><b id="fact-count">3</b><span>内置免费游戏</span></li>
+        <li><b>100%</b><span>本地运行</span></li>
+      </ul>
+    </div>
+
+    <div class="hero-art" aria-hidden="true">
+      <svg class="console" viewBox="0 0 640 360" role="img">
+        <defs>
+          <linearGradient id="body" x1="0" y1="0" x2="0.4" y2="1">
+            <stop offset="0" stop-color="#4b3d8a"/>
+            <stop offset="0.5" stop-color="#312767"/>
+            <stop offset="1" stop-color="#1e1841"/>
+          </linearGradient>
+          <linearGradient id="bezel" x1="0" y1="0" x2="0.5" y2="1">
+            <stop offset="0" stop-color="#15122a"/>
+            <stop offset="1" stop-color="#0a0916"/>
+          </linearGradient>
+          <linearGradient id="screenGlow" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#5cf2c0" stop-opacity=".16"/>
+            <stop offset="1" stop-color="#7b5cff" stop-opacity=".05"/>
+          </linearGradient>
+          <clipPath id="screenClip"><rect x="146" y="88" width="204" height="136" rx="2"/></clipPath>
+          <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse">
+            <rect width="4" height="4" fill="#000" opacity="0"/>
+            <rect y="0" width="4" height="1.1" fill="#000" opacity=".28"/>
+          </pattern>
+          <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+            <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000" flood-opacity=".55"/>
+          </filter>
+        </defs>
+
+        <ellipse cx="300" cy="326" rx="248" ry="18" fill="#000" opacity=".5"/>
+
+        <!-- 机身 -->
+        <g filter="url(#softShadow)">
+          <path d="M96 40 H476 a44 44 0 0 1 44 44 v172 a44 44 0 0 1 -44 44 H96 a40 40 0 0 1 -40 -40 V80 a40 40 0 0 1 40 -40 Z"
+                fill="url(#body)" stroke="#8a72e0" stroke-opacity=".5" stroke-width="2"/>
+          <path d="M100 56 H470" stroke="#c9b9ff" stroke-opacity=".35" stroke-width="2" stroke-linecap="round"/>
+          <path d="M78 288 H500" stroke="#0a0718" stroke-opacity=".45" stroke-width="3" stroke-linecap="round"/>
+        </g>
+
+        <!-- 屏幕 -->
+        <g>
+          <rect x="124" y="68" width="248" height="184" rx="14" fill="url(#bezel)" stroke="#8b73e0" stroke-opacity=".28"/>
+          <rect x="146" y="88" width="204" height="136" rx="2" fill="#05050b"/>
+          <g clip-path="url(#screenClip)">
+            <image href="art/shots/ucity-0.png" class="slide s1" x="146" y="88" width="204" height="136" preserveAspectRatio="xMidYMid slice"/>
+            <image href="art/shots/bj-2.png" class="slide s2" x="146" y="88" width="204" height="136" preserveAspectRatio="xMidYMid slice"/>
+            <image href="art/shots/ucity-2.png" class="slide s3" x="146" y="88" width="204" height="136" preserveAspectRatio="xMidYMid slice"/>
+            <rect x="146" y="88" width="204" height="136" fill="url(#screenGlow)"/>
+            <polygon points="146,88 218,88 146,184" fill="#fff" opacity=".05"/>
+            <rect x="146" y="88" width="204" height="136" fill="url(#scan)"/>
+            <rect x="146" y="88" width="204" height="136" fill="none" stroke="#000" stroke-opacity=".55"/>
+          </g>
+          <text x="248" y="240" text-anchor="middle" fill="#b6a7f2" fill-opacity=".92"
+                font-family="Press Start 2P, monospace" font-size="8.5" letter-spacing="1.2">GAME BOY ADVANCE</text>
+          <circle cx="136" cy="74" r="2.4" fill="#5cf2c0">
+            <animate attributeName="opacity" values="1;.25;1" dur="2.4s" repeatCount="indefinite"/>
+          </circle>
+        </g>
+
+        <!-- 十字键 -->
+        <g stroke-linejoin="round">
+          <rect x="83" y="127" width="22" height="66" rx="4" fill="#171230" stroke="#0a0814" stroke-width="2.5"/>
+          <rect x="61" y="149" width="66" height="22" rx="4" fill="#171230" stroke="#0a0814" stroke-width="2.5"/>
+          <circle cx="94" cy="160" r="4" fill="#2c2450"/>
+        </g>
+
+        <!-- A / B -->
+        <g>
+          <circle cx="404" cy="190" r="16" fill="#211a3d" stroke="#0a0814" stroke-width="2.5"/>
+          <circle cx="404" cy="190" r="11.5" fill="#3d3268"/>
+          <circle cx="436" cy="158" r="16" fill="#211a3d" stroke="#0a0814" stroke-width="2.5"/>
+          <circle cx="436" cy="158" r="11.5" fill="#3d3268"/>
+          <text x="404" y="194" text-anchor="middle" fill="#b3a3ec" font-size="11" font-family="Press Start 2P, monospace">B</text>
+          <text x="436" y="162" text-anchor="middle" fill="#b3a3ec" font-size="11" font-family="Press Start 2P, monospace">A</text>
+        </g>
+
+        <!-- START / SELECT -->
+        <g transform="rotate(-20 226 268)">
+          <rect x="176" y="263" width="42" height="10" rx="5" fill="#1d1737"/>
+          <rect x="230" y="263" width="42" height="10" rx="5" fill="#1d1737"/>
+        </g>
+        <text x="196" y="292" fill="#8f82c9" font-family="Press Start 2P, monospace" font-size="6" text-anchor="middle">SELECT</text>
+        <text x="262" y="292" fill="#8f82c9" font-family="Press Start 2P, monospace" font-size="6" text-anchor="middle">START</text>
+
+        <!-- 扬声器 -->
+        <g fill="#100c1f" opacity=".95">
+          <circle cx="452" cy="262" r="2.8"/><circle cx="464" cy="262" r="2.8"/><circle cx="476" cy="262" r="2.8"/>
+          <circle cx="452" cy="274" r="2.8"/><circle cx="464" cy="274" r="2.8"/><circle cx="476" cy="274" r="2.8"/>
+          <circle cx="452" cy="286" r="2.8"/><circle cx="464" cy="286" r="2.8"/><circle cx="476" cy="286" r="2.8"/>
+        </g>
+
+        <!-- L / R -->
+        <rect x="140" y="24" width="72" height="13" rx="6.5" fill="#2b2350"/>
+        <rect x="356" y="24" width="72" height="13" rx="6.5" fill="#2b2350"/>
+        <text x="176" y="19" text-anchor="middle" fill="#8f82c9" font-family="Press Start 2P, monospace" font-size="7">L</text>
+        <text x="392" y="19" text-anchor="middle" fill="#8f82c9" font-family="Press Start 2P, monospace" font-size="7">R</text>
+      </svg>
+      <div class="art-caption">
+        <span class="pill mint">就绪</span>
+        <span>3 款内置游戏 · 本地卡带导入</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="library" id="library">
+    <div class="section-head">
+      <div class="section-title">
+        <h2>游戏库</h2>
+        <span class="count" id="lib-count">0</span>
+      </div>
+      <div class="tabs" role="tablist">
+        <button class="tab is-active" data-filter="builtin" type="button" role="tab">内置免费</button>
+        <button class="tab" data-filter="local" type="button" role="tab">我的导入 <span class="tab-n" id="tab-n-local">0</span></button>
+        <button class="tab" data-filter="all" type="button" role="tab">全部</button>
+      </div>
+      <button class="btn ghost sm" id="btn-import-lib" type="button">＋ 导入</button>
+    </div>
+
+    <div class="grid" id="lib-grid"></div>
+
+    <div class="empty" id="lib-empty" hidden>
+      <div class="empty-icon">＋</div>
+      <h3>还没有导入任何游戏</h3>
+      <p>把本地的 <code>.gba</code> 或 <code>.zip</code> 文件拖进这个页面，或点击「导入 ROM」。<br>文件只保存在你自己的浏览器里，不会上传到任何服务器。</p>
+      <button class="btn primary" id="btn-import-empty" type="button">选择文件</button>
+    </div>
+  </section>
+
+  <section class="notes">
+    <article class="note">
+      <div class="note-num">01</div>
+      <h3>支持哪些文件</h3>
+      <p><code>.gba</code> / <code>.agb</code> / <code>.bin</code> 单体卡带，或内部装着 GBA 卡带的 <code>.zip</code>。后缀写错也没关系：zip 改名成 <code>.gba</code> 会被自动解开；实在认不出，提示会告诉你它到底是什么格式。</p>
+    </article>
+    <article class="note">
+      <div class="note-num">02</div>
+      <h3>键盘 &amp; 手柄</h3>
+      <p>方向键移动，<kbd>Z</kbd> A 键、<kbd>X</kbd> B 键，<kbd>Q</kbd>/<kbd>E</kbd> 是 L/R，<kbd>Enter</kbd> Start、<kbd>V</kbd> Select。插上 USB / 蓝牙手柄也能直接识别。</p>
+    </article>
+    <article class="note">
+      <div class="note-num">03</div>
+      <h3>存档与离线</h3>
+      <p>电池存档、即时存档、截图都在浏览器本地（IndexedDB）。整个站点不含任何联网请求，关掉网络照样能玩。</p>
+    </article>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-in">
+    <div class="footer-brand">
+      <b>POCKET ADVANCE</b>
+      <span>一个跑在浏览器里的 GBA 掌机。</span>
+    </div>
+    <div class="footer-legal">
+      <p><b>不含任何商业游戏 ROM。</b>内置游戏均为作者允许免费分发的开源 / 同人作品，版权归各自作者所有。</p>
+      <p>想玩商业游戏？请使用你自己拥有卡带的合法转储文件。模拟器内核 <a href="https://mgba.io/" target="_blank" rel="noreferrer">mGBA</a> (MPL-2.0)，前端 <a href="https://emulatorjs.org/" target="_blank" rel="noreferrer">EmulatorJS</a> (GPL-3.0)。</p>
+    </div>
+  </div>
+</footer>
+
+<!-- 播放器 -->
+<div class="player" id="player" hidden>
+  <div class="player-top">
+    <button class="btn ghost sm" id="btn-back" type="button">← 返回游戏库</button>
+    <div class="player-meta">
+      <span class="pl-title" id="pl-title">—</span>
+      <span class="pill" id="pl-badge">内置</span>
+    </div>
+    <div class="player-actions">
+      <span class="player-keys">方向键 · Z/X · Enter · Q/E</span>
+    </div>
+  </div>
+  <div class="stage" id="stage">
+    <div class="screen-box" id="screen-box">
+      <div id="ejs-root"></div>
+    </div>
+  </div>
+  <div class="player-foot">
+    <span><kbd>Esc</kbd> 退出全屏 / 暂停</span>
+    <span class="sep">·</span>
+    <span>把鼠标移到画面上，底部会浮出存档 / 快进 / 全屏菜单</span>
+    <span class="sep">·</span>
+    <span id="pl-size">—</span>
+  </div>
+</div>
+
+<!-- 拖拽遮罩 -->
+<div class="drop-veil" id="drop-veil" hidden>
+  <div class="drop-card">
+    <div class="drop-icon">⤓</div>
+    <b>松手即导入</b>
+    <span>.gba / .agb / .bin / .zip</span>
+  </div>
+</div>
+
+<!-- 关于 / 版权 -->
+<div class="modal" id="modal-about" hidden>
+  <div class="modal-card">
+    <button class="modal-x" id="modal-close" type="button" aria-label="关闭">✕</button>
+    <p class="kicker"><span class="dot"></span>ABOUT</p>
+    <h2>关于这个页面</h2>
+    <div class="modal-body">
+      <p>「掌机口袋」是一个纯前端的 GBA 模拟器外壳：内核是 <b>mGBA</b> 编译成的 WebAssembly，由 <b>EmulatorJS</b> 负责加载与输入，界面、游戏库和文件管理都是本地代码。整个站点没有后端，不上传、不请求任何外部地址。</p>
+
+      <h3>内置游戏为什么只有几款？</h3>
+      <p>因为《宝可梦》《黄金太阳》《火焰纹章》这类商业卡带的 ROM 是有版权的，不能打包分发——内置的每一款都是作者明确允许免费下载 / 开源的同人作品（<b>µCity Advance</b>、<b>Blind Jump</b>、<b>Minicraft GBA</b>），卡片上有各自的许可证与作者。</p>
+
+      <h3>想玩自己收藏的那款？</h3>
+      <p>只要你有卡带和一部能读卡带的设备，把 ROM 转储成 <code>.gba</code> 后从这里导入即可，它只存在你本机的浏览器里。不存在「下载 ROM」的入口，这是这个项目的底线。</p>
+
+      <h3>数据都在哪</h3>
+      <p>导入的 ROM 存在 IndexedDB；存档（.sav）、即时存档（.state）由 EmulatorJS 存在本地数据库。清除浏览器站点数据会一并删除，重要进度建议定期用菜单里的「导出存档」备份。</p>
+
+      <h3>技术栈</h3>
+      <p>原生 HTML / CSS / JavaScript，无框架、无构建。EmulatorJS 运行时已完整镜像到本地 <code>data/</code>，首次启动不需要联网。需要通过本地 HTTP 服务打开（WebAssembly 与 Worker 不允许 <code>file://</code>）。</p>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="file-input" accept=".gba,.agb,.bin,.zip,application/zip" multiple hidden>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script src="data/vendor/fflate.js"></script>
+<script src="js/data.js"></script>
+<script src="js/rom.js"></script>
+<script src="js/db.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

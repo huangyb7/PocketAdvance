@@ -1,0 +1,20 @@
+# 系统垃圾
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 依赖与构建产物（本项目不需要构建，留作占位）
+node_modules/
+dist/
+
+# 日志与临时文件
+*.log
+*.tmp
+.part
+
+# roms/ 只提交内置的三款开源卡带；
+# 你自己导入 / 转储的商业游戏 ROM 属于私有文件，不要提交到仓库
+roms/*
+!roms/ucity.gba
+!roms/blindjump.gba
+!roms/minicraft.gba
