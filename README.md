@@ -159,3 +159,5 @@ PocketAdvance/
 - 字体 [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P)（SIL OFL 1.1）。
 
 本项目只做界面、游戏库与工程整合，不含任何商业 ROM。
+友情赞助链接： https://ifdian.net/a/huangyubin
+
